@@ -1,10 +1,16 @@
 
-#TIL
+# TIL
 
-#목차
+# 목차
 
 - ptyhon
-  - 문자열
-  - If statement
-  - for statement, while statement
+ - review with jupyter notebook
+ - study
+ - practice with python-300 
+  
+- HTML/CSS
+
+- JavaScript
+
+- Django
 
