@@ -5,8 +5,10 @@
 
 - ptyhon
   + review with jupyter notebook
+  + test code
   + study
-  + practice with python-300 
+  + practice with python-300
+   
   
 - HTML/CSS
 
