@@ -1,9 +1,9 @@
-
+i
 # TIL
 
 ## 목차
 
-- ptyhon
+- python
   + review with jupyter notebook
   + test code
   + study
