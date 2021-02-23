@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+}
+.header, .visual, .main, .slogan, .footer-content{
+    width: 940px;
+    margin: 0 auto;
+}
+.header{
+    background-color: yellow;
+    height: 10vh;
+}
+.visual{
+    background-color: red;
+    height: 10vh;
+}
+.main{
+    background-color: blue;
+    /* height: 60vh; */
+    /* border: 10px solid green; */
+    overflow: hidden;
+    /* float: left; */
+    /* display: inline-block; */
+}
+/* .main::after{
+    clear:both;
+} */
+.group{
+    height: 60vh;
+}
+.group1{
+    background-color: violet;
+    width: 250px;
+    float: left;
+}
+.group2{
+    background-color: aquamarine;
+    width: 380px;
+    float: left;
+}
+.group3{
+    background-color: sandybrown;
+    width: 190px;
+    float: left;
+}
+/* .clear{
+    clear: both;
+} */
+.slogan{
+    /* clear: both; */
+    background-color: green;
+    height: 10vh;
+    /* margin-top: 50px; */
+}
+.footer{
+    background-color: grey;
+}
+.footer-content{
+    background-color: salmon;
+    height: 10vh;
+
+}
