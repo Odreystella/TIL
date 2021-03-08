@@ -15,7 +15,12 @@ def index():
 #addtional route with json
 @app.route('/users')
 def show_users():
-    return {'users:['John Doe', 'Jane Doe']}
+    return {'users':['John Doe', 'Jane Doe']}
+
+#route with variable
+@app.route('/user/<username>')
+def show_user(username):
+    return {'user':username}
 
 
 if __name__=='__main__':
