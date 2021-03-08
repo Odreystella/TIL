@@ -13,6 +13,10 @@
 - HTML/CSS
 
 - JavaScript
+  + studying basis of CS  
+    - Day01 - memory, variable,,,
+    - Day02
+
 
 - Django
 
