@@ -8,7 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     #return 'Flask works'
-    return render_template('index.html')
+    #return render_template('index.html')
+    msg = 'This is msg block'
+    return render_template('index.html', msg=msg)
 
 #addtional route with json
 @app.route('/users')
