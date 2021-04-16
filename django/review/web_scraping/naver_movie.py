@@ -27,7 +27,12 @@ def get_movie_list():
 
     return movies_list
 
-print(get_movie_list())
+movies_list = get_movie_list()
+# print(movies_list)
+
+
+
+    
 
 
     
