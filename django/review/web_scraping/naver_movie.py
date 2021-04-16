@@ -31,7 +31,6 @@ movies_list = get_movie_list()
 # print(movies_list)
 
 
-
     
 
 
