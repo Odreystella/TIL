@@ -14,7 +14,7 @@
     + [Day05 - 객체 생성 방식 차이, prototype](https://github.com/Odreystella/What-I-Reviewed/blob/master/JavaScript/review/Day05.README.md)
 
 - Django
-  + Day01 - web scarpe(naver_movie)
+  + Day01 - web scraping(naver_movie)
 
 - Python
   + review with jupyter notebook
