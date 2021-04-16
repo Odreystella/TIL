@@ -40,7 +40,6 @@ print(get_movie_code('서복'))
 movie_code = get_movie_code('서복')
 
 
-
     
 
 
