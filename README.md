@@ -13,6 +13,9 @@
     + [Day04 - function, scope, 전역변수 문제점, let, const](https://github.com/Odreystella/What-I-Reviewed/blob/master/JavaScript/review/Day04.README.md)
     + [Day05 - 객체 생성 방식 차이, prototype](https://github.com/Odreystella/What-I-Reviewed/blob/master/JavaScript/review/Day05.README.md)
 
+- Django
+  + Day01 - web scarpe(naver_movie)
+
 - Python
   + review with jupyter notebook
     + [Day02 - String, Group Objects(list, tuple)](https://github.com/Odreystella/What-I-Reviewed/blob/master/python/review/Day%202.%20review.ipynb)
@@ -29,5 +32,4 @@
   
 - [Montly test code](https://github.com/Odreystella/What-I-Reviewed/tree/master/test)   
   
-- Django
 
