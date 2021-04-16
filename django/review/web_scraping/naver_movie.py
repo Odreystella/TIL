@@ -30,6 +30,15 @@ def get_movie_list():
 movies_list = get_movie_list()
 # print(movies_list)
 
+# 영화 제목 입력하면 code를 출력하는 함수
+def get_movie_code(movie_title):
+    for movie in movies_list:
+        if movie_title == movie['movie_title']:
+            return movie['code']
+
+print(get_movie_code('서복'))
+movie_code = get_movie_code('서복')
+
 
     
 
