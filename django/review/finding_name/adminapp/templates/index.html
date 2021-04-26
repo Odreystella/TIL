@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Name</title>
+</head>
+<body>
+    <h1>Find name</h1>
+    <form action="{% url 'verify'%}" method="POST">
+        {% csrf_token %}  <!--form태그로 POST요청시 필수로 보내야하는 토큰-->
+        <input type="text" placeholder="이름을 입력하세요." name="username"> 
+        <input type="time" name="time">
+        <button>검색</button>
+        <!-- <input type="submit">검색 -->
+    </form>    
+</body>
+</html>
