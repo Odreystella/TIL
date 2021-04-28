@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
     <title>Community</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
 <body>
-    <h1>Home</h1> 
+    <h1>Home <span class="count">카테고리 갯수:{{category_len}}</span> </h1>
     <ul>
         {% for category in category_list %}
-        <li>{{category}}</li>
+        <li>
+            <a href="{% url 'category' category.pk %}">{{category}}</a>
+            <!-- <span>{{category.contents}}</span> -->
+        </li>
         {% endfor %}
     </ul> 
-</body>
 </html>

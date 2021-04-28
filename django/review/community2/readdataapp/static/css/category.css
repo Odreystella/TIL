@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    border: 1px solid lightgrey;
+    width: 500px;
+}
+.heading {
+    font-size: 18px;
+}
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.title {
+    width: 300px;
+    position: relative;
+    border-right: 1px solid lightgrey;
+}
+div > span::after {
+    content: '';
+    display: inline-block;
+    width: 250px;
+    border-bottom: 1px solid lightgrey;
+}

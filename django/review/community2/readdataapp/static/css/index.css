@@ -1,0 +1,15 @@
+body {
+    font-family: 'Gaegu', cursive;
+    font-size: 16px;
+}
+
+a {
+    color: lightcoral;
+    text-decoration: none;
+}
+
+.count {
+    font-size: 14px;
+}
+
+

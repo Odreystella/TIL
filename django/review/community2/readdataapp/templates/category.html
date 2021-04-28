@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
+    <title>Community</title>
+</head>
+<body>
+    <h1>Category : <span class="heading">{{category}}</span></h1>
+    <div class="container">
+        <div class="title">
+            <span>제목</span>
+            <ol>
+                {% for article in category.article.all %}
+                <li><a href="{% url 'detail' article.pk %}">{{article}}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="writer">
+            <span>작성자</span>
+            <ul>
+                {% for article in category.article.all %}
+                <li>{{article.writer}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

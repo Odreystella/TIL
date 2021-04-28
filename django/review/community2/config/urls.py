@@ -19,5 +19,7 @@ from readdataapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name="index"),
+    path('', views.index, name='index'),
+    path('category/<int:category_pk>', views.category, name='category'),
+    path('detail/<int:article_pk>', views.detail, name='detail'),
 ]
