@@ -13,11 +13,11 @@
 <body>
     <h1>Home <span class="count">카테고리 갯수:{{category_len}}</span> </h1>
     <ul>
-        {% for category in category_list %}
+        {% for category in categories %}
         <li>
             <a href="{% url 'category' category.pk %}">{{category}}</a>
-            <!-- <span>{{category.contents}}</span> -->
         </li>
         {% endfor %}
     </ul> 
+    <a href="{% url 'add' category_pk %}" class="write">글쓰기</a>
 </html>

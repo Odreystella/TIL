@@ -18,7 +18,9 @@
             <span>제목</span>
             <ol>
                 {% for article in category.article.all %}
+                {% if article.is_delated == False %}
                 <li><a href="{% url 'detail' article.pk %}">{{article}}</a></li>
+                {% endif %}
                 {% endfor %}
             </ol>
         </div>
@@ -26,10 +28,14 @@
             <span>작성자</span>
             <ul>
                 {% for article in category.article.all %}
+                {% if article.is_delated == False %}
                 <li>{{article.writer}}</li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </div>
     </div>
+    <a href="{% url 'index' %}">HOME</a>
+    <a class="write" href="{% url 'add' category_pk %}">글쓰기 click me</a>  
 </body>
 </html>
