@@ -17,41 +17,15 @@
     </style>
 </head>
 <body>
-    <h1>글 추가</span></h1>
+    <h1>글 추가 <span>카테고리:  </span></h1>
     <p>{% if error.state %}
     {{error.msg}}
     {% endif %}
     </p>
-    {% if category_pk <= 6 and category_pk >= 0 %}
-    <form action="{% url 'add' category_pk %}" method="POST">
+    <form action="{% url 'add' %}" method="POST">
         {% csrf_token %}      <!--git에 올릴 때 지우기-->
-        <label for="pk_category">카테고리</label>
-       
-        <select name="pk_category" id="pk_category">
-            {% for category in categories %}
-            {% if category.pk == category_pk %}
-            <option selected>{{category}}</option>
-            {% else %}
-            <option value="{{category.pk}}">{{category}}</option>
-            {% endif %}
-            {% endfor %}
-        </select>     
-                       
-        <br><br>
-        <label for="title">제목</label>    
-        <input id="title" type="text" placeholder="제목을 입력하세요" name="title"><br><br>
-        <label for="writer">작성자</label>
-        <input id="writer" type="text" placeholder="이름을 입력하세요" name="writer"><br><br>
-        <label for="contents">내용</label><br>
-        <textarea id="contents" cols="30" rows="10" name="contents"></textarea><br>
-        <button type="submit">완료</button>
-    </form>
-    {% else %}
-    <form action="{% url 'add' category_pk %}" method="POST">
-        {% csrf_token %}      <!--git에 올릴 때 지우기-->
-        <label for="category_pk">카테고리</label>
-       
-        <select name="category_pk_home" id="category_pk">
+        <label for="category_pk">카테고리</label>       
+        <select name="category_pk">
             <option selected>카테고리를 선택하세요.</option>
             {% for category in categories %}
             <option value="{{category.pk}}">{{category}}</option>
@@ -61,12 +35,9 @@
         <br><br>
         <label for="title">제목</label>    
         <input id="title" type="text" placeholder="제목을 입력하세요" name="title"><br><br>
-        <label for="writer">작성자</label>
-        <input id="writer" type="text" placeholder="이름을 입력하세요" name="writer"><br><br>
         <label for="contents">내용</label><br>
         <textarea id="contents" cols="30" rows="10" name="contents"></textarea><br>
         <button type="submit">완료</button>
     </form>
-    {% endif %}
 </body>
 </html>

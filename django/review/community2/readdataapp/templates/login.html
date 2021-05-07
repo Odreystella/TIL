@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+    <h1>로그인</h1>
+    {% if error.state %}
+    {{ error.msg }}
+    {% endif %}
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <label for="userid">아이디</label>
+        <input type="text" placeholder="아이디를 입력하세요." name="userid" /><br><br>
+        <label for="password">비밀번호</label>
+        <input type="password" placeholder="비밀번호를 입력하세요." name="password" /><br><br>
+        <button type="submit">로그인</button>
+    </form>    
+</body>
+</html>

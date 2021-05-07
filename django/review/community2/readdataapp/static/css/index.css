@@ -12,6 +12,10 @@ a {
     font-size: 14px;
 }
 
+.greeting {
+    color: darkgreen;
+}
+
 .write {
     position: relative;
     left: 200px;

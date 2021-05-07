@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category, Article
+from .models import Category, Article, Profile, Comment
 from django.urls import path
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -23,7 +23,7 @@ def category(request, category_pk):
     # categort = get_object_or_404(Category, pk=category_pk)
     context = {
         'category' : category,
-        'category_pk': category_pk,
+        # 'category_pk': category_pk,
     }
     # print(category.article.all())
     return render(request, 'category.html', context)
@@ -31,20 +31,21 @@ def category(request, category_pk):
 def detail(request, article_pk):
     article = Article.objects.filter(pk=article_pk).first()
     # article = get_object_or_404(Article, pk=article_pk)
+    # user = get_object_or_404(User, username=userid)
     context = {
         'article' : article,
         'article_pk' : article_pk,
+        # 'user' : user,
     }
     return render(request, 'detail.html', context)
 
-def add(request, category_pk):
+def add(request):
     categories = Category.objects.all()
     article = Article.objects.all()
-    category = get_object_or_404(Category, pk=category_pk)
     context = {
         'categories' : categories,
         'article' : article,
-        'category_pk' : category.pk,
+        # 'category_pk' : category_pk,
         # 'category_pk_home' : request.POST['category_pk_home'],
         # 'pk' : target_category,
         # 'new_article_pk' : new_article_pk,
@@ -55,23 +56,22 @@ def add(request, category_pk):
     } 
                 
     if request.method == 'POST':
-        pk_category = request.POST['pk_category']
+        selected_category = request.POST['category_pk']
         title = request.POST['title']
-        writer = request.POST['writer']
+        # writer = request.POST['writer']
         contents = request.POST['contents']   
-        print(category_pk)
 
-        if (title and contents and writer):
+        if (title and contents):
 
-            target_category = get_object_or_404(Category, pk=pk_category)   
+            target_category = get_object_or_404(Category, pk=selected_category)   
 
             article = Article.objects.create(
                 category=target_category,
                 title=title,
-                writer=writer,
+                writer=request.user,
                 contents=contents,
             )
-            return redirect('category', category_pk)
+            return redirect('category', target_category.pk )
 
         else:
             context['error']['state'] = True
@@ -116,16 +116,24 @@ def delete(request, article_pk):
 
     return redirect('category', category_pk)
 
-def signup(request):
-    error_msg = {
+# 상수값처럼 쓰고 싶을 때 대문자로 표기하는 것이 관습
+ERROR_MSG = {
             'FILLED_INPUT' : '필수항목을 채워주세요',
             'EXIST_ID' : '이미 존재하는 아이디입니다.',
+            'NO_EXIST_ID' : '존재하지 않는 아이디입니다.',
             'PASSWORD_CHECK' : '비밀번호를 다시 입력해주세요', 
+            'PASSWORD_LENGTH' : '비밀번호는 8자리 이상이어야 합니다.'
     }
+
+# 비밀번호 유효성 체크 함수    
+def validate_password():
+    pass
+
+def signup(request):
     context = {
         'error' : {
             'state' : False,
-            'msg' : error_msg,
+            'msg' : ERROR_MSG,
         }
     }
    
@@ -134,24 +142,39 @@ def signup(request):
         password = request.POST['password']
         password_check = request.POST['password_check']
         user = User.objects.filter(username=userid)
+
+        name = request.POST['name']
+        email = request.POST['email']
+        residence = request.POST['residence']
         
         if (not userid or not password or not password_check):
             context['error']['state'] = True
-            context['error']['msg'] = error_msg['FILLED_INPUT']
-            
+            context['error']['msg'] = ERROR_MSG['FILLED_INPUT']
+
+        if len(password) <= 8:
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['PASSWORD_LENGTH']
+
         if len(user) != 0: # 유저 아이디가 존재하니?
             context['error']['state'] = True
-            context['error']['msg'] = error_msg['EXIST_ID']
+            context['error']['msg'] = ERROR_MSG['EXIST_ID']
 
         if password != password_check:
             context['error']['state'] = True
-            context['error']['msg'] = error_msg['PASSWORD_CHECK']
+            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
         if context['error']['state'] == False:
             # 아래는 state == False일 때 실행되어야 함    
             user = User.objects.create_user(
                     username=userid,
                     password=password,
+            )
+
+            Profile.objects.create(
+                user=user,
+                name=name,
+                email=email,
+                residence=residence,
             )
 
             auth.login(request, user)
@@ -171,7 +194,7 @@ def signup(request):
     context = {
         'error' : {
             'state' : False,
-            'msg' : error_msg,
+            'msg' : ERROR_MSG,
         }
     }
     if request.method == 'POST':
@@ -194,16 +217,54 @@ def signup(request):
 
                 else :
                     context['error']['state'] = True
-                    context['error']['msg'] = error_msg['PASSWORD_CHECK']
+                    context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
 
             else:
                 context['error']['state'] = True
-                context['error']['msg'] = error_msg['EXIST_ID']
+                context['error']['msg'] = ERROR_MSG['EXIST_ID']
 
         else:
             context['error']['state'] = True
-            context['error']['msg'] = error_msg['FILLED_INPUT']
+            context['error']['msg'] = ERROR_MSG['FILLED_INPUT']
 
     return render(request, 'signup.html', context)
 """
 
+def login(request):
+    context = {
+        'error' : {
+            'state' : False,
+            'msg' : ERROR_MSG,
+        }
+    }
+
+    if request.method == 'POST':
+        post = request.POST
+        userid = post['userid']
+        password = post['password']
+        
+        if (not userid or not password):
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['FILLED_INPUT']
+            return render(request, 'login.html', context)
+        
+        try:
+            user = User.objects.get(username=userid)
+
+        except User.DoesNotExist:                
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['NO_EXIST_ID']
+            return render(request, 'login.html', context)
+
+        auth_user = auth.authenticate(username=userid, password=password) # userid와 password가 일치하면
+        if auth_user:
+            auth.login(request, user)
+            return redirect('index')     
+
+    response = render(request, 'login.html', context)
+
+    return response
+
+def logout(request):
+    auth.logout(request)
+    return redirect('index')
