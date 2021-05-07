@@ -25,9 +25,9 @@
     {% if category_pk <= 6 and category_pk >= 0 %}
     <form action="{% url 'add' category_pk %}" method="POST">
         {% csrf_token %}      <!--git에 올릴 때 지우기-->
-        <label for="category_pk">카테고리</label>
+        <label for="pk_category">카테고리</label>
        
-        <select name="category_pk" id="category_pk">
+        <select name="pk_category" id="pk_category">
             {% for category in categories %}
             {% if category.pk == category_pk %}
             <option selected>{{category}}</option>

@@ -12,6 +12,8 @@
 </head>
 <body>
     <h1>Home <span class="count">카테고리 갯수:{{category_len}}</span> </h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'signup' %}">로그아웃</a>
     <ul>
         {% for category in categories %}
         <li>
@@ -20,4 +22,9 @@
         {% endfor %}
     </ul> 
     <a href="{% url 'add' category_pk %}" class="write">글쓰기</a>
+
+    {% else %}
+    <a href="{% url 'signup' %}">회원가입 GoGo</a>
+    {% endif %}
+</body>
 </html>

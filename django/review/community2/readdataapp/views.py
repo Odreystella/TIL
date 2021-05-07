@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, Article
 from django.urls import path
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 # Create your views here.
 def index(request):
@@ -53,7 +55,7 @@ def add(request, category_pk):
     } 
                 
     if request.method == 'POST':
-        # category_pk = request.POST['category_pk']
+        pk_category = request.POST['pk_category']
         title = request.POST['title']
         writer = request.POST['writer']
         contents = request.POST['contents']   
@@ -61,7 +63,7 @@ def add(request, category_pk):
 
         if (title and contents and writer):
 
-            target_category = get_object_or_404(Category, pk=category_pk)   
+            target_category = get_object_or_404(Category, pk=pk_category)   
 
             article = Article.objects.create(
                 category=target_category,
@@ -113,3 +115,95 @@ def delete(request, article_pk):
     print(target_article.is_delated)
 
     return redirect('category', category_pk)
+
+def signup(request):
+    error_msg = {
+            'FILLED_INPUT' : '필수항목을 채워주세요',
+            'EXIST_ID' : '이미 존재하는 아이디입니다.',
+            'PASSWORD_CHECK' : '비밀번호를 다시 입력해주세요', 
+    }
+    context = {
+        'error' : {
+            'state' : False,
+            'msg' : error_msg,
+        }
+    }
+   
+    if request.method =='POST':
+        userid = request.POST['userid']
+        password = request.POST['password']
+        password_check = request.POST['password_check']
+        user = User.objects.filter(username=userid)
+        
+        if (not userid or not password or not password_check):
+            context['error']['state'] = True
+            context['error']['msg'] = error_msg['FILLED_INPUT']
+            
+        if len(user) != 0: # 유저 아이디가 존재하니?
+            context['error']['state'] = True
+            context['error']['msg'] = error_msg['EXIST_ID']
+
+        if password != password_check:
+            context['error']['state'] = True
+            context['error']['msg'] = error_msg['PASSWORD_CHECK']
+
+        if context['error']['state'] == False:
+            # 아래는 state == False일 때 실행되어야 함    
+            user = User.objects.create_user(
+                    username=userid,
+                    password=password,
+            )
+
+            auth.login(request, user)
+
+            return redirect('index')      
+
+    return render(request, 'signup.html', context)
+
+# before refactorting
+"""
+def signup(request):
+    error_msg = {
+            'FILLED_INPUT' : '필수항목을 채워주세요',
+            'EXIST_ID' : '이미 존재하는 아이디입니다.',
+            'PASSWORD_CHECK' : '비밀번호를 다시 입력해주세요', 
+    }
+    context = {
+        'error' : {
+            'state' : False,
+            'msg' : error_msg,
+        }
+    }
+    if request.method == 'POST':
+        userid = request.POST['userid']
+        password = request.POST['password']
+        password_check = request.POST['password_check']
+        user = User.objects.filter(username=userid)
+
+        if (userid and password and password_check):
+
+            if len(user) == 0: 
+            
+                if password == password_check:
+                    user = User.objects.create_user(
+                        username=userid,
+                        password=password,
+                    )
+                    auth.login(request, user)
+                    return redirect('index')
+
+                else :
+                    context['error']['state'] = True
+                    context['error']['msg'] = error_msg['PASSWORD_CHECK']
+
+            else:
+                context['error']['state'] = True
+                context['error']['msg'] = error_msg['EXIST_ID']
+
+        else:
+            context['error']['state'] = True
+            context['error']['msg'] = error_msg['FILLED_INPUT']
+
+    return render(request, 'signup.html', context)
+"""
+
