@@ -333,3 +333,15 @@ def follow(request, writer_pk):
     relationship.followers.remove(request.user)   
 
     return redirect('profile_detail', writer_pk)
+
+def likecomment(request, comment_pk):
+    comment = LikeComment.objects.filter(comment__pk=comment_pk).first()
+    article_pk = Comment.objects.filter(pk=comment_pk).first().article.pk 
+
+    if request.user not in comment.user.all():
+        comment.user.add(request.user)
+        return redirect('detail', article_pk)
+
+    comment.user.remove(request.user)
+
+    return redirect('detail', article_pk)
