@@ -30,4 +30,9 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    path('profile_detail/<int:writer_pk>', views.profile_detail, name='profile_detail'),
+
+    #comment
+    path('comment/<int:article_pk>', views.comment, name='comment'),
+    
 ]

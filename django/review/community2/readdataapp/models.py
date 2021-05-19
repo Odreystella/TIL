@@ -28,9 +28,21 @@ class Profile(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.TextField(default=time.time())
 
+    def __str__(self):
+        return self.name 
+
 class Comment(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.SET_NULL, related_name='comment', null=True, blank=True)
-    writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='comment', null=True, blank=True )
+    article = models.ForeignKey(Article, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True)
+    writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True )
     contents = models.TextField()
     is_deleted = models.BooleanField(default=False)
     created_at = models.TextField(default=time.time())
+
+class Relationship(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='relationship')
+    followers =  models.ManyToManyField(User, related_name='following', null=True, blank=True)
+
+class LikeComment(models.Model):
+    comment = models.OneToOneField(Comment, on_delete=models.CASCADE, related_name='like_comment')
+    user = models.ManyToManyField(User, null=True, blank=True, related_name='like_comment')
+    

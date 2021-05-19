@@ -29,5 +29,37 @@
     <a onclick="return confirm('정말 삭제하시겠습니까?');" href="{% url 'delete' article.pk %}">삭제하기</a>
     {% endif %}
     <a href="{% url 'category' article.category.pk %}">뒤로</a>
+    
+    <article>
+        <h1>댓글</h1>
+        <ul>
+            {% for comment in comments%}
+            {% if article.writer == comment.writer %}
+            <li>
+                <a href="{% url 'profile_detail' comment.writer.pk %}">작성자님</a> : {{comment.contents}}
+                <form action="{% url 'likecomment' comment.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type=submit>좋아요</button>
+                </form>
+            </li>
+            {% else %}
+            <li>
+                <a href="{% url 'profile_detail' comment.writer.pk %}">{{comment.writer}}님</a>: {{comment.contents}}
+                <form action="{% url 'likecomment' comment.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type=submit>좋아요</button>
+                </form>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+
+        <form action="{% url 'comment' article.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="댓글을 입력하세요." name="comment"/>
+            <button>등록</button>
+        </form>
+    </article>
+
 </body>
 </html>

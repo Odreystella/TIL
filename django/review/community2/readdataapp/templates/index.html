@@ -14,19 +14,19 @@
     <h1>Home <span class="count">카테고리 갯수:{{category_len}}</span> </h1>
     {% if user.is_authenticated %}
     <h2 class="greeting">{{user.profile.name}}님, 안녕하세요</h2>
-    <a href="{% url 'logout' %}">로그아웃</a>
+    <a class="link" href="{% url 'logout' %}">로그아웃</a>
     <ul>
         {% for category in categories %}
         <li>
-            <a href="{% url 'category' category.pk %}">{{category}}</a>
+            <a class="categories" href="{% url 'category' category.pk %}">{{category}}</a>
         </li>
         {% endfor %}
     </ul> 
     <a href="{% url 'add' %}" class="write">글쓰기</a>
 
     {% else %}
-    <a href="{% url 'signup' %}">회원가입 GoGo</a><br><br>
-    <a href="{% url 'login' %}">로그인 GoGo</a>
+    <a class="link" href="{% url 'signup' %}">회원가입 GoGo</a><br><br>
+    <a class="link" href="{% url 'login' %}">로그인 GoGo</a>
     {% endif %}
 </body>
 </html>

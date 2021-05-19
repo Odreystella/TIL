@@ -3,17 +3,22 @@ body {
     font-size: 16px;
 }
 
-a {
-    color: lightcoral;
-    text-decoration: none;
-}
-
 .count {
     font-size: 14px;
 }
 
 .greeting {
     color: darkgreen;
+}
+
+.link {
+    color: lightcoral;
+    text-decoration: none;
+}
+
+.categories {
+    color: lightcoral;
+    text-decoration: none;
 }
 
 .write {

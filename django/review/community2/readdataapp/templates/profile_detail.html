@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
+    <title>Community</title>
+    <style>
+        a {
+            color: black;
+            background-color: lightcoral;            
+        }
+    </style>
+</head>
+<body>
+    <h1>{{writer.profile.name}}({{writer}})님 MY PAGE</h1>
+    {% if request.user == writer %}
+    {% else %}
+    <form action="{% url 'follow' writer.pk %}" method="POST">
+        {% csrf_token %}
+        {% if is_followed %}
+        <button type="submit">unfollowing</button>
+        {% else %}
+        <button type="submit">following</button>
+        {% endif %}
+    </form>
+    {% endif %}
+
+    <h3>내가 쓴 댓글</h3>
+    <ul>
+        {% for comment in comments%}
+        <li>{{comment.contents}}</li>
+        {% endfor %}
+    </ul>
+    <a href="#">뒤로</a>
+</body>
+</html>

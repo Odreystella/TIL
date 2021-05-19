@@ -19,7 +19,7 @@
             <ol>
                 {% for article in category.article.all %}
                 {% if article.is_delated == False %}
-                <li><a href="{% url 'detail' article.pk %}">{{article}}</a></li>
+                <li><a class="categories" href="{% url 'detail' article.pk %}">{{article}}</a></li>
                 {% endif %}
                 {% endfor %}
             </ol>
@@ -35,7 +35,7 @@
             </ul>
         </div>
     </div>
-    <a href="{% url 'index' %}">HOME</a>
+    <a class="categories" href="{% url 'index' %}">HOME</a>
     <a class="write" href="{% url 'add' %}">글쓰기 click me</a>  
 </body>
 </html>

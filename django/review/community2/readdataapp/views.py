@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category, Article, Profile, Comment
+from .models import Category, Article, Profile, Comment, Relationship, LikeComment
 from django.urls import path
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -32,10 +32,18 @@ def detail(request, article_pk):
     article = Article.objects.filter(pk=article_pk).first()
     # article = get_object_or_404(Article, pk=article_pk)
     # user = get_object_or_404(User, username=userid)
+    comments = Comment.objects.filter(article__pk=article_pk)
+    # comment_pk = comments.first().pk
+    # likecomment = LikeComment.objects.filter(pk=comment_pk)
+
+    # for comment in comments:
+    #     if request.user in             
+
+
     context = {
         'article' : article,
         'article_pk' : article_pk,
-        # 'user' : user,
+        'comments' : comments,
     }
     return render(request, 'detail.html', context)
 
@@ -177,6 +185,10 @@ def signup(request):
                 residence=residence,
             )
 
+            Relationship.objects.create(
+                user=user,
+            )
+
             auth.login(request, user)
 
             return redirect('index')      
@@ -257,9 +269,14 @@ def login(request):
             return render(request, 'login.html', context)
 
         auth_user = auth.authenticate(username=userid, password=password) # userid와 password가 일치하면
-        if auth_user:
-            auth.login(request, user)
-            return redirect('index')     
+        if not auth_user:
+            context['error']['state'] = True
+            context['error']['msg'] = ERROR_MSG['PASSWORD_CHECK']
+            return render(request, 'login.html', context)
+        
+        # 조건을 다 통과한다면 로그인 시켜주기 
+        auth.login(request, user)
+        return redirect('index')     
 
     response = render(request, 'login.html', context)
 
@@ -268,3 +285,20 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('index')
+
+def comment(request, **kwargs):
+    article_pk = kwargs['article_pk']
+    target_article = get_object_or_404(Article, pk=article_pk)
+    input_comment = request.POST['comment']
+
+    comment = Comment.objects.create(
+        article=target_article,
+        writer=request.user,
+        contents=input_comment,
+    )
+    LikeComment.objects.create(
+        comment=comment,
+    )
+
+    return redirect('detail', article_pk)
+
