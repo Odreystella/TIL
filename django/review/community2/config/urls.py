@@ -35,4 +35,6 @@ urlpatterns = [
     #comment
     path('comment/<int:article_pk>', views.comment, name='comment'),
     
+    #follow
+    path('follow/<int:writer_pk>', views.follow, name='follow'),
 ]

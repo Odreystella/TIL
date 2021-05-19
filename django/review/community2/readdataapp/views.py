@@ -302,3 +302,34 @@ def comment(request, **kwargs):
 
     return redirect('detail', article_pk)
 
+def profile_detail(request, **kwargs):
+    writer_pk = kwargs['writer_pk']
+    # article_pk = kwargs['article_pk']
+    writer = get_object_or_404(User, pk=writer_pk)
+    comments = Comment.objects.filter(writer__pk=writer_pk)
+    
+    is_followed = False
+    relationship = Relationship.objects.filter(user__pk=writer_pk).first()
+
+    if request.user not in relationship.followers.all():
+        is_followed = True    
+
+    context = {
+        'writer' : writer,
+        'comments' : comments,
+        # 'article_pk' : article_pk,
+        'is_followed' : is_followed,
+    }
+    return render(request, 'profile_detail.html', context)
+
+def follow(request, writer_pk):
+    relationship = Relationship.objects.filter(user__pk=writer_pk).first()
+    followers = relationship.followers.all()
+
+    if request.user not in followers:
+        relationship.followers.add(request.user)
+        return redirect('profile_detail', writer_pk)
+    
+    relationship.followers.remove(request.user)   
+
+    return redirect('profile_detail', writer_pk)
