@@ -13,6 +13,8 @@
     <style>
         a {color: black; background-color: lightcoral;}
         form { display:inline-block;}
+        .tag { display:inline-block;}
+
     </style>
 </head>
 <body>
@@ -26,15 +28,30 @@
     <a href="{% url 'edit' article.pk %}">수정하기</a>
     <a onclick="return confirm('정말 삭제하시겠습니까?');" href="{% url 'delete' article.pk %}">삭제하기</a>
     {% endif %}
-    <a href="{% url 'category' article.category.pk %}">뒤로</a>
-    
+
+    <article>
+        <h1>태그</h1>
+        <ul>
+            {% for tag in tags %}
+            <li class="tag"><a href="{% url 'tag-detail' tag.pk %}">{{tag.name}}</a></li>
+            {% endfor %}
+        </ul>
+        {% if user == article.writer %}
+        <form action="{% url 'tag' article.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="태그를 입력하세요" name="tag">
+            <button>등록</button>
+        </form>
+        {% endif %}
+    </article>
+
     <article>
         <h1>댓글</h1>
         <ul>
             {% for comment in comments%}
             {% if article.writer == comment.comment.writer %}
             <li>
-                {% if user != comment.comment.writer %}
+                {% if user == comment.comment.writer %}
                 <a href="{% url 'profile_detail' comment.comment.writer.pk %}">작성자님</a> : {{comment.comment.contents}}
                 {% else %}
                 <a href="{% url 'profile_detail' comment.comment.writer.pk %}">작성자님</a> : {{comment.comment.contents}}
@@ -67,13 +84,14 @@
             {% endif %}
             {% endfor %}
         </ul>
-
         <form action="{% url 'comment' article.pk %}" method="POST">
             {% csrf_token %}
             <input type="text" placeholder="댓글을 입력하세요." name="comment"/>
             <button>등록</button>
         </form>
     </article>
-
+    <br/>
+    <a href="{% url 'category' article.category.pk %}">뒤로</a>
+    
 </body>
 </html>

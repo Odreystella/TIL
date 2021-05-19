@@ -36,6 +36,11 @@ urlpatterns = [
     path('comment/<int:article_pk>', views.comment, name='comment'),
     path('likecomment/<int:comment_pk>', views.likecomment, name='likecomment'),
 
-        #follow
+    #follow
     path('follow/<int:writer_pk>', views.follow, name='follow'),
+
+    #tag
+    path('tag/<int:article_pk>', views.tag, name='tag'),
+    path('tag/detail/<int:tag_pk>', views.tag_detail, name='tag-detail'),
+
 ]

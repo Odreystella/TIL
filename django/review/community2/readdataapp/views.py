@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category, Article, Profile, Comment, Relationship, LikeComment
+from .models import Category, Article, Profile, Comment, Relationship, LikeComment, Tag
 from django.urls import path
 from django.contrib.auth.models import User
 from django.contrib import auth
@@ -34,6 +34,7 @@ def detail(request, article_pk):
     # user = get_object_or_404(User, username=userid)
     comments = Comment.objects.filter(article__pk=article_pk)
 
+    #좋아요 한 댓글들
     comment_list = []
     for comment in comments:
         is_liked = False
@@ -46,11 +47,15 @@ def detail(request, article_pk):
         }
         comment_list.append(data)
 
+    #tag
+    tags = Tag.objects.filter(articles__pk=article_pk)
+
     context = {
         'article' : article,
         'article_pk' : article_pk,
         # 'comments' : comments,
         'comments' : comment_list,
+        'tags' : tags,
     }
     return render(request, 'detail.html', context)
 
@@ -352,3 +357,24 @@ def likecomment(request, comment_pk):
     comment.user.remove(request.user)
 
     return redirect('detail', article_pk)
+
+def tag(request, article_pk):
+    tag_name = request.POST['tag']
+    article = Article.objects.filter(pk=article_pk).first()
+    tag = Tag.objects.filter(name=tag_name).first()
+
+    if tag:
+        tag.articles.add(article)
+        return redirect('detail', article_pk)
+    
+    new_tag = Tag.objects.create(name=tag_name)
+    new_tag.articles.add(article)
+    return redirect('detail', article_pk)
+
+def tag_detail(request, tag_pk):
+    tag = Tag.objects.filter(pk=tag_pk).first()
+    articles = tag.articles.all()
+    context={
+        'articles' : articles,
+    }
+    return render(request, 'tag_detail.html', context)
