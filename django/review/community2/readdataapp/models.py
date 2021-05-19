@@ -9,6 +9,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='article')
     writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='article', null=True, blank=True)
@@ -19,6 +20,7 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='profile', null=True, blank=True)
@@ -31,6 +33,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.name 
 
+
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True)
     writer = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='comments', null=True, blank=True )
@@ -38,11 +41,17 @@ class Comment(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.TextField(default=time.time())
 
+
 class Relationship(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='relationship')
-    followers =  models.ManyToManyField(User, related_name='following', null=True, blank=True)
+    followers =  models.ManyToManyField(User, related_name='following',blank=True)
+
 
 class LikeComment(models.Model):
     comment = models.OneToOneField(Comment, on_delete=models.CASCADE, related_name='like_comment')
-    user = models.ManyToManyField(User, null=True, blank=True, related_name='like_comment')
+    user = models.ManyToManyField(User, blank=True, related_name='like_comment')
     
+
+class Tag(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    articles = models.ManyToManyField(Article, blank=True, related_name='tag')
