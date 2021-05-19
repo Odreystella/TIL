@@ -11,10 +11,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
     <title>Community</title>
     <style>
-        a {
-            color: black;
-            background-color: lightcoral;            
-        }
+        a {color: black; background-color: lightcoral;}
+        form { display:inline-block;}
     </style>
 </head>
 <body>
@@ -34,21 +32,37 @@
         <h1>댓글</h1>
         <ul>
             {% for comment in comments%}
-            {% if article.writer == comment.writer %}
+            {% if article.writer == comment.comment.writer %}
             <li>
-                <a href="{% url 'profile_detail' comment.writer.pk %}">작성자님</a> : {{comment.contents}}
-                <form action="{% url 'likecomment' comment.pk %}" method="POST">
+                {% if user != comment.comment.writer %}
+                <a href="{% url 'profile_detail' comment.comment.writer.pk %}">작성자님</a> : {{comment.comment.contents}}
+                {% else %}
+                <a href="{% url 'profile_detail' comment.comment.writer.pk %}">작성자님</a> : {{comment.comment.contents}}
+                <form action="{% url 'likecomment' comment.comment.pk %}" method="POST">
                     {% csrf_token %}
-                    <button type=submit>좋아요</button>
+                    {% if comment.is_liked %}
+                    <button type=submit>좋아요 취소 : {{comment.count_of_likes}}</button>
+                    {% else %}
+                    <button type=submit>좋아요 : {{comment.count_of_likes}}</button>
+                    {% endif %}
                 </form>
+                {% endif %}
             </li>
             {% else %}
             <li>
-                <a href="{% url 'profile_detail' comment.writer.pk %}">{{comment.writer}}님</a>: {{comment.contents}}
-                <form action="{% url 'likecomment' comment.pk %}" method="POST">
+                {% if user == comment.comment.writer %}
+                <a href="{% url 'profile_detail' comment.comment.writer.pk %}">{{comment.comment.writer}}님</a>: {{comment.comment.contents}}
+                {% else %}
+                <a href="{% url 'profile_detail' comment.comment.writer.pk %}">{{comment.comment.writer}}님</a>: {{comment.comment.contents}}
+                <form action="{% url 'likecomment' comment.comment.pk %}" method="POST">
                     {% csrf_token %}
-                    <button type=submit>좋아요</button>
+                    {% if comment.is_liked %}
+                    <button type=submit>좋아요 취소: {{comment.comment.like_comment.user.all | length }}</button>
+                    {% else %}
+                    <button type=submit>좋아요 : {{comment.comment.like_comment.user.all | length }}</button>
+                    {% endif %}
                 </form>
+                {% endif %}
             </li>
             {% endif %}
             {% endfor %}

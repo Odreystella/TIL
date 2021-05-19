@@ -33,17 +33,24 @@ def detail(request, article_pk):
     # article = get_object_or_404(Article, pk=article_pk)
     # user = get_object_or_404(User, username=userid)
     comments = Comment.objects.filter(article__pk=article_pk)
-    # comment_pk = comments.first().pk
-    # likecomment = LikeComment.objects.filter(pk=comment_pk)
 
-    # for comment in comments:
-    #     if request.user in             
-
+    comment_list = []
+    for comment in comments:
+        is_liked = False
+        if request.user in comment.like_comment.user.all():
+            is_liked = True
+        data = {
+            'is_liked' : is_liked,
+            'comment' : comment,
+            'count_of_likes': len(comment.like_comment.user.all()),
+        }
+        comment_list.append(data)
 
     context = {
         'article' : article,
         'article_pk' : article_pk,
-        'comments' : comments,
+        # 'comments' : comments,
+        'comments' : comment_list,
     }
     return render(request, 'detail.html', context)
 
