@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block head%}
+<style>
+    .required {color:red;}
+</style>
+{% endblock head%}
+
+{% block content %}
+<h1>회원가입</h1>
+{% if error.status %}
+{{error.msg}}
+{% endif %}
+<form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %}
+    <label for="user-id">아이디<span class="required">*</span></label>
+    <input type="text" id="user-id" placeholder="아이디를 입력하세요" name="userid"/>
+    <br/>
+    <br/>
+    <label for="user-password">비밀번호<span class="required">*</span></label>
+    <input type="password" id="user-password" placeholder="비밀번호를 입력하세요" name="userpassword"/>
+    <br/>
+    <br/>
+    <label for="user-password-check">비밀번호 확인<span class="required">*</span></label>
+    <input type="password" id="user-password-check" placeholder="비밀번호를 다시 입력하세요" name="userpasswordcheck"/>
+    <br/>
+    <br/>
+    <label for="name">이름<span class="required">*</span></label>
+    <input type="text" id="name" placeholder="이름을 입력하세요" name="name"/>
+    <br/>
+    <br/>
+    <button type="submit">가입</button>
+</form>
+{% endblock content %}

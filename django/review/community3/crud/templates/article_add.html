@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>글쓰기</h1>
+<h3>카테고리: {{category}}</h3>
+{% if error.status %}
+{{error.msg}}
+{% endif %}
+<form action="{% url 'article-add' category.pk %}" method="POST">
+    {% csrf_token %}
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" />
+    <br/>
+    <label for="content">내용</label>
+    <br/>
+    <textarea name="content" id="content" cols="30" rows="10"></textarea>
+    <br/>
+    <button type="submit">등록</button>
+</form>
+
+{% endblock content %}

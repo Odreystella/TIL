@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+    input {height: 17px;}
+    button { border: 1px solid blueviolet; color:blueviolet; background-color: transparent; border-radius: 3px; font-size: 14px; position: relative; top: 2px;}
+    .like {display: inline-block;}
+    .btn-like {border: 1px solid blueviolet; color:blueviolet; background-color: transparent; border-radius: 3px; font-size: 12px; position: relative; top: 2px;}
+    .tag {position: relative ;top: -12px;}
+</style>
+{% endblock head %}
+
+{% block content %}
+<h1>아티클 상세보기</h1>
+<p>제목 : {{article.title}}<br/>
+작성자 : {{article.author}}<br/>
+내용 : {{article.content}}<br/>
+태그 :
+{% for tag in tags %}
+<a href="{% url 'tag-detail' tag.pk %}">{{tag.name}}</a>
+{% endfor %}
+</p>
+{% if user == article.author %}
+<form class="tag" action="{% url 'tag' article.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="tag">
+    <button type="submit">태그 추가</button>
+</form>
+{% endif %}
+{% if user == article.author%}
+<a href="{% url 'article-edit' article.pk %}">수정</a>
+<a href="{% url 'article-delete' article.pk %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a><br/>
+{% endif %}
+<h3>댓글</h3>
+<ul>
+    {% for comment in comments %}
+    {% if comment.comment.commenter == article.author %}
+    <li>
+        {% if user == comment.comment.commenter %}
+        <a href="{% url 'profile-detail' comment.comment.commenter.pk %}">작성자님</a>: {{comment.comment.content}}
+        {% else %}
+        <a href="{% url 'profile-detail' comment.comment.commenter.pk %}">작성자님</a>: {{comment.comment.content}}
+        <form class="like" action="{% url 'like' comment.comment.pk %}" method="POST">
+            {% csrf_token %}
+            {% if comment.is_liked %}
+            <button class="btn-like" type=submit>좋아요 취소 :{{comment.comment.liked_comment.users.all | length}}</button>
+            {% else %}
+            <button class="btn-like" type=submit>좋아요 :{{comment.comment.liked_comment.users.all | length}}</button>
+            {% endif %}
+        </form>
+        {% endif %}
+    </li><br>
+    {% else %}
+    <li>
+        {% if user == comment.comment.commenter %}
+        <a href="{% url 'profile-detail' comment.comment.commenter.pk %}">{{comment.comment.commenter}}</a>: {{comment.comment.content}}
+        {% else %}
+        <a href="{% url 'profile-detail' comment.comment.commenter.pk %}">{{comment.comment.commenter}}</a>: {{comment.comment.content}}
+        <form class="like" action="{% url 'like' comment.comment.pk %}" method="POST">
+            {% csrf_token %}
+            {% if comment.is_liked %}
+            <button class="btn-like" type=submit>좋아요 취소 :{{comment.count_of_likes}}</button>
+            {% else %}
+            <button class="btn-like" type=submit>좋아요 :{{comment.count_of_likes}}</button>
+            {% endif %}
+        </form>
+        {% endif %}
+    </li><br>
+    {% endif %}
+    {% endfor %}
+</ul>
+<form action="{% url 'comment' article.pk %}" method="POST">
+    {% csrf_token %}
+    <label for="comment">댓글</label>
+    <input type="text" id="comment" name="comment">
+    <button type="submit">등록</button>
+</form>
+<br/>
+<br/>
+<a href="{% url 'category' article.category.pk %}">뒤로</a>
+{% endblock content %}

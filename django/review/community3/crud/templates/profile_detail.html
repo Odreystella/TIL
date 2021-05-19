@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+    button { border: 1px solid blueviolet; color:blueviolet; background-color: transparent; border-radius: 3px; font-size: 14px; position: relative; top: 2px;}
+</style>
+{% endblock head %}
+
+{% block content %}
+<h1>{{commenter.profile.name}}({{commenter}})'s My Page</h1>
+{% if user == commenter %}
+{% else %}
+<form action="{% url 'follow' commenter.pk %}" method="POST">
+    {% csrf_token %}
+    {% if is_followed %}
+    <button type="submit">언팔로잉</button>
+    {% else %}
+    <button type="submit">팔로잉</button>
+    {% endif %}
+</form>
+{% endif %}
+
+<h3>내가 쓴 댓글</h3>
+<ul>
+    {% for comment in comments %}
+    <li>{{comment.content}}</li>
+    {% endfor %}
+</ul>
+<br/>
+<a href="{% url 'article-detail' article_pk %}">뒤로</a>
+{% endblock content %}

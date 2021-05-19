@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>아티클 모아보기</h1>
+<h3>카테고리: {{category}}</h3>
+<ul>
+    {% for article in articles %}
+    <li><a href="{% url 'article-detail' article.pk %}">{{article.title}}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'article-add' category.pk %}">글쓰기</a>
+<br/>
+<a href="{% url 'index' %}">뒤로</a>
+{% endblock content %}
